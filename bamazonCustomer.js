@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 });
 
 
-console.log("Welcom To Bamazon - The Most Explosive Place For Everything!");
+console.log("\n\n\nWelcom To Bamazon - The Most Explosive Place For Everything!");
 console.log("____________________________________________________________");
 console.log("\nCurrent Inventory:\n");
 
@@ -25,7 +25,7 @@ connection.query("SELECT * FROM ??",["products"], function(err, res) {
     for(var i = 0; i < res.length; i++){
       console.log("Item Number: " + res[i].id + " | " + res[i].product_name + " | Price: $" + res[i].price + " | Units Available: " + res[i].stock_quantity);
     }
-    console.log("____________________________________________________________");
+    console.log("____________________________________________________________\n\n");
     start();
 });
 
@@ -64,7 +64,7 @@ function start(){
             var buyQuantity = answers.buyQuantity;
 
         // Query The Item Number From SQL
-            connection.query("SELECT stock_quantity, product_name, price FROM products WHERE id ="+buyItem, function(err, res) {
+            connection.query("SELECT ??, ??, ?? FROM ?? WHERE id ="+buyItem,["stock_quantity", "product_name", "price","products"], function(err, res) {
                 if (err) throw err;
                  var buyInventory = res[0].stock_quantity;
                  var buyName = res[0].product_name;
@@ -78,17 +78,17 @@ function start(){
                 // Check Current Inventory To See If We Can Process The Order
                 if(buyInventory < buyQuantity){
                     console.log("\nWe Cannote Complete Your Order\nThe Store Does Not Have Enough Inventory!\n")
-                    console.log("____________________________________________________________");
+                    console.log("____________________________________________________________\n\n");
                     start();
                 } else{
                     console.log("\nYou Order Has Been Procesed!");
                     var newInventory = parseInt(buyInventory) - parseInt(buyQuantity);
                     console.log("You Purchased " + buyQuantity + " " + buyName +"(s)");
-                    console.log("BAMazon Has " + newInventory + " " + buyName +"(s) Left In Inventory");
-                    connection.query("UPDATE products SET stock_quantity ='" + newInventory + "'WHERE id =" + buyItem, function(err, res) {
+                    console.log("Bamazon Has " + newInventory + " " + buyName +"(s) Left In Inventory");
+                    connection.query("UPDATE ?? SET ?? ='" + newInventory + "'WHERE id =" + buyItem,["products", "stock_quantity"],function(err, res) {
                         if (err) throw err;
                         console.log("Your Total Purchase Amount: $" + orderTotal);
-                        console.log("____________________________________________________________");
+                        console.log("____________________________________________________________\n\n");
                         start();
                     });
                 };

@@ -53,18 +53,19 @@ function start(){
       };
 
 function productSales(){
-    connection.query("SELECT id, product_name, price, stock_quantity FROM ??",["products"], function(err, res) {
+    console.log("\n____________________________________________________________");
+    connection.query("SELECT ??, ??, ??, ?? FROM ??",["id", "product_name", "price", "stock_quantity", "products"], function(err, res) {
         if (err) throw err;
         for(var i = 0; i < res.length; i++){
             console.log("Item Number: " + res[i].id + " | " + res[i].product_name + " | Price: $" + res[i].price + " | Units Available: " + res[i].stock_quantity);
         }
-        console.log("____________________________________________________________");
+        console.log("____________________________________________________________\n\n");
         start();
     });
 }
 
 function lowInventory(){
-    connection.query("SELECT product_name, stock_quantity FROM ??",["products"], function(err, res) {
+    connection.query("SELECT ??, ?? FROM ??",["product_name","stock_quantity","products"],function(err, res) {
         if (err) throw err;
         var lowStockCount = 0;
         
@@ -97,7 +98,7 @@ function addInventory(){
     var stockArray = [];
 
 
-    connection.query("SELECT product_name, stock_quantity FROM ??",["products"], function(err, res) {
+    connection.query("SELECT ??, ?? FROM ??",["product_name","stock_quantity","products"], function(err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++){
             storeItems.push(res[i].product_name);
@@ -119,7 +120,7 @@ function addInventory(){
                 if(value !=="" && typeof parseInt(value) === "number") {
                 return true;
                 } else{
-                console.log('Please Enter A Valid Number!');
+                console.log(' **Please Enter A Valid Number!** ');
                 return false;
                 }
             }
@@ -135,8 +136,7 @@ function addInventory(){
         // Calculate New Inventory Based on Existing And New
         var updatedInventory = parseInt(newUnits) + parseInt(currentUnits);
 
-        var query = connection.query(
-              "UPDATE products SET stock_quantity = '" + updatedInventory +"' WHERE product_name = '"+updateItem+"'", function(err, res) {
+        connection.query("UPDATE ?? SET ?? = '" + updatedInventory +"' WHERE ?? = '"+updateItem+"'",["products","stock_quantity", "product_name"],function(err, res) {
               console.log(newUnits + " " + updateItem + "(s) Added!\n");
               console.log("____________________________________________________________\n\n");
               start();
@@ -149,8 +149,71 @@ function addInventory(){
 
 function addProduct(){
 
+    var departments = ["Games","Grocery","Health & Beauty","Home & Garden"];
 
-
+    inquirer.prompt([
+        {
+            name: 'newItemName',
+            message: 'Enter New Item Name: ',
+            type: 'input',
+            validate: function(value){
+                if(value !=="" && typeof value === "string") {
+                return true;
+                } else{
+                console.log(' **Please Enter A Valid Name!** ');
+                return false;
+                }
+            }
+        },
+        {
+            name: 'departmentName',
+            message: 'Select Department: ',
+            type: 'list',
+            choices: departments
+        },
+        {
+            name: 'initialQuantity',
+            message: 'Enter Initial Quantity: ',
+            type: 'input',
+            validate: function(value){
+                if(value !=="" && typeof parseInt(value) === "number") {
+                return true;
+                } else{
+                console.log(' **Please Enter A Valid Number!** ');
+                return false;
+                }
+            }
+        },
+        {
+            name: 'productPrice',
+            message: 'Enter Sale Price: ',
+            type: 'input',
+            validate: function(value){
+                if(value !=="" && typeof parseInt(value) === "number") {
+                return true;
+                } else{
+                console.log(' **Please Enter A Valid Number!** ');
+                return false;
+                }
+            }
+        }
+      ]).then(function(answers) {
+        connection.query(
+            "INSERT INTO ?? SET ?",
+            ["products",
+            {
+            product_name: answers.newItemName,
+            department_name: answers.departmentName,
+            stock_quantity: answers.initialQuantity,
+            price: answers.productPrice
+            }],
+        function(err, res) {
+            console.log(answers.newItemName + " Was Added To Inventory!\n");
+            console.log("____________________________________________________________\n\n");
+            start();
+            }
+        );
+    });
 };
 
 
