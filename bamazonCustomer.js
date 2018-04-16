@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 });
 
 
-console.log("Welcom To BAMazon - The Most Explosive Place For Everything!");
+console.log("Welcom To Bamazon - The Most Explosive Place For Everything!");
 console.log("____________________________________________________________");
 console.log("\nCurrent Inventory:\n");
 
@@ -23,8 +23,9 @@ console.log("\nCurrent Inventory:\n");
 connection.query("SELECT * FROM ??",["products"], function(err, res) {
     if (err) throw err;
     for(var i = 0; i < res.length; i++){
-      console.log("Item Number: " + res[i].id + " | Item: " + res[i].product_name + " | Price: $" + res[i].price);
+      console.log("Item Number: " + res[i].id + " | " + res[i].product_name + " | Price: $" + res[i].price + " | Units Available: " + res[i].stock_quantity);
     }
+    console.log("____________________________________________________________");
     start();
 });
 
@@ -46,7 +47,7 @@ function start(){
         },
         {
             name: 'buyQuantity',
-            message: '\nPlease Enter Quantity:  ',
+            message: 'Please Enter Quantity:  ',
             type: 'input',
             validate: function(value){
                 if(value !=="" && typeof parseInt(value) === "number") {
@@ -80,9 +81,10 @@ function start(){
                     console.log("____________________________________________________________");
                     start();
                 } else{
-                    console.log("You Order Has Been Procesed!");
+                    console.log("\nYou Order Has Been Procesed!");
                     var newInventory = parseInt(buyInventory) - parseInt(buyQuantity);
-                    console.log("BAMazon Has " + newInventory + " " + buyName +"s Left In Inventory");
+                    console.log("You Purchased " + buyQuantity + " " + buyName +"(s)");
+                    console.log("BAMazon Has " + newInventory + " " + buyName +"(s) Left In Inventory");
                     connection.query("UPDATE products SET stock_quantity ='" + newInventory + "'WHERE id =" + buyItem, function(err, res) {
                         if (err) throw err;
                         console.log("Your Total Purchase Amount: $" + orderTotal);
