@@ -64,11 +64,12 @@ function start(){
             var buyQuantity = answers.buyQuantity;
 
         // Query The Item Number From SQL
-            connection.query("SELECT ??, ??, ?? FROM ?? WHERE id ="+buyItem,["stock_quantity", "product_name", "price","products"], function(err, res) {
+            connection.query("SELECT ??, ??, ??, ?? FROM ?? WHERE id ="+buyItem,["stock_quantity", "product_name", "price", "department_name", "products"], function(err, res) {
                 if (err) throw err;
                  var buyInventory = res[0].stock_quantity;
                  var buyName = res[0].product_name;
                  var buyUnitPrice = res[0].price;
+                 var buyDepartment = res[0].department_name;
                  console.log("____________________________________________________________");
                  console.log("\nEach " + buyName +" Costs: $" + buyUnitPrice);
                  var orderTotal = parseFloat(buyUnitPrice) * parseInt(buyQuantity);
@@ -85,14 +86,26 @@ function start(){
                     var newInventory = parseInt(buyInventory) - parseInt(buyQuantity);
                     console.log("You Purchased " + buyQuantity + " " + buyName +"(s)");
                     console.log("Bamazon Has " + newInventory + " " + buyName +"(s) Left In Inventory");
+
                     connection.query("UPDATE ?? SET ?? ='" + newInventory + "'WHERE id =" + buyItem,["products", "stock_quantity"],function(err, res) {
                         if (err) throw err;
                         console.log("Your Total Purchase Amount: $" + orderTotal);
-                        console.log("____________________________________________________________\n\n");
-                        start();
+                        
+                        // Updates department sales
+                        connection.query("SELECT ?? FROM ?? WHERE department_name = ?",["product_sales","departments", buyDepartment], function(err, res) {
+
+                            // Calculate New Sales Based On Existing Sales + Purchase
+                            var newTotalSales = parseFloat(orderTotal) + parseFloat(res[0].product_sales);
+    
+                            // Update Department Table
+                            connection.query("UPDATE ?? SET ?? = '" + newTotalSales +"' WHERE ?? = '"+buyDepartment+"'",["departments", "product_sales", "department_name"],function(err, res) {
+                            
+                                console.log("____________________________________________________________\n\n");
+                                start();
+                            });
+                        });
                     });
                 };
             });
         });
     };
-
