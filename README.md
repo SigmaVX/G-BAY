@@ -43,7 +43,7 @@ Save The following two lines in a .env file:
 
 
 ## Screenshot
-![G-BAY Screen Shot](./Screenshot.png)
+![G-BAY Screen Shot](./gbay.png)
 
 
 
