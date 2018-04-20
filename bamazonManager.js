@@ -218,7 +218,5 @@ function addProduct(){
     });
 };
 
-
-
 start();
   

@@ -16,7 +16,7 @@ var connection = mysql.createConnection({
 });
 
 
-console.log("\n\n\nWelcom To Bamazon - The Most Explosive Place For Everything!");
+console.log("\n\n\nWelcome To Bamazon - The Most Explosive Place For Everything!");
 console.log("____________________________________________________________");
 console.log("\n                Current Inventory:\n");
 
@@ -77,7 +77,7 @@ function start(){
                 // Check Current Inventory To See If We Can Process The Order
                 if(buyInventory < buyQuantity){
    
-                    console.log("\n\n***We Cannote Complete Your Order***\nThe Store Does Not Have Enough Inventory!")
+                    console.log("\n\n***We Can't Complete Your Order***\nThe Store Does Not Have Enough Inventory!")
                     console.log("____________________________________________________________\n\n");
                     start();
                 } else{
@@ -85,7 +85,7 @@ function start(){
                     var newInventory = parseInt(buyInventory) - parseInt(buyQuantity);
                     var newProductSales = parseFloat(buyProductSales) + parseFloat(orderTotal);
 
-                    console.log("\n\nOrder Procesed!");
+                    console.log("\n\nOrder Processed!");
                     console.log("____________________________________________________________\n");
                     console.log("Each " + buyName +" Costs: $" + buyUnitPrice);
                     console.log("You Purchased " + buyQuantity + " " + buyName +"(s)");

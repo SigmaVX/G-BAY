@@ -1,7 +1,7 @@
 # G-BAY
 G-BAY is a back-end database application that lets users buy, sell, and manage items through Node JS, MySQL, and the Command Line Interface (a proxy for the front-end). This application uses the dotenv NPM to secure SQL credentials and masks fields to prevent SQL Injection.  This app also includes financial tools to track sales and profits by operating unit.  
 
-**Video Demo** - https://youtu.be/1X-ln24Xju8 
+**Video Demo** - https://youtu.be/mkKY-PP0d9E
 
 ## Key Features
 * Display All Product Inventory & Pricing
