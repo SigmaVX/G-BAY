@@ -1,6 +1,7 @@
 require('dotenv').config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+const cTable = require('console.table');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -14,9 +15,9 @@ var connection = mysql.createConnection({
   database: process.env.SQL_DB
 });
 
-var options = ["View Products for Sale","View Low Inventory","Add to Inventory","Add New Product"];
+var options = ["View Products For Sale","View Low Inventory","Add To Inventory","Add New Product"];
 
-// console.log("Welcom To Bamazon - The Most Explosive Place For Everything!");
+console.log("\n\n        Welcome To The Bamazon Management Portal!");
 console.log("____________________________________________________________");
 
 
@@ -24,7 +25,7 @@ function start(){
     inquirer.prompt([
             {
               name: 'pickAction',
-              message: 'Welcome To The Bamazon Management Portal!\nPlease Select One Of The Following Options: ',
+              message: '\nPlease Select One Of The Following Options: ',
               type: 'list',
               choices: options
             }
@@ -32,7 +33,7 @@ function start(){
 
             // Run Switch Case To Trigger A Function
             switch (answers.pickAction) {
-                case "View Products for Sale":
+                case "View Products For Sale":
                     // console.log("View Products for Sale");
                     productSales();
                     break;
@@ -40,7 +41,7 @@ function start(){
                     // console.log("View Low Inventory");
                     lowInventory();
                     break;
-                case "Add to Inventory":
+                case "Add To Inventory":
                     // console.log("Add to Inventory");
                     addInventory();
                     break;
@@ -56,9 +57,10 @@ function productSales(){
     console.log("\n____________________________________________________________");
     connection.query("SELECT ??, ??, ??, ?? FROM ??",["id", "product_name", "price", "stock_quantity", "products"], function(err, res) {
         if (err) throw err;
-        for(var i = 0; i < res.length; i++){
-            console.log("Item Number: " + res[i].id + " | " + res[i].product_name + " | Price: $" + res[i].price + " | Units Available: " + res[i].stock_quantity);
-        }
+        // for(var i = 0; i < res.length; i++){
+        //     console.log("Item Number: " + res[i].id + " | " + res[i].product_name + " | Price: $" + res[i].price + " | Units Available: " + res[i].stock_quantity);
+        // }
+        console.table(res);
         console.log("____________________________________________________________\n\n");
         start();
     });

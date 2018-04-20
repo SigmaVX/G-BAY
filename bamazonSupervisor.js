@@ -17,13 +17,14 @@ var connection = mysql.createConnection({
 
 var options = ["View Department Sales","Create New Department"];
 
+console.log("\n\n        Welcome To The Bamazon Supervisor Portal!");
 console.log("____________________________________________________________");
 
 function start(){
     inquirer.prompt([
             {
               name: 'pickAction',
-              message: '\nWelcome To The Bamazon Supervisor Portal!\nPlease Select One Of The Following Options: ',
+              message: '\nPlease Select One Of The Following Options: ',
               type: 'list',
               choices: options
             }
